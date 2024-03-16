@@ -10,7 +10,8 @@
    import mars.MIPSprogram;
    import mars.ProcessingException;
    import mars.ProgramStatement;
-   import mars.mips.hardware.AddressErrorException;
+import mars.mips.SO.ProcessManager.TabelaDeProcessos;
+import mars.mips.hardware.AddressErrorException;
    import mars.mips.hardware.Memory;
    import mars.mips.instructions.BasicInstruction;
    import mars.mips.instructions.ExtendedInstruction;
@@ -119,7 +120,7 @@
       public ArrayList assemble(MIPSprogram p, boolean extendedAssemblerEnabled,
        	boolean warningsAreErrors) throws ProcessingException {
          ArrayList programFiles = new ArrayList();
-         programFiles.add(p);
+         programFiles.add(p);         
          return this.assemble(programFiles, extendedAssemblerEnabled, warningsAreErrors);
       }
    

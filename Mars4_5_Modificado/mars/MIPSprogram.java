@@ -295,7 +295,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     **/
    
        public ErrorList assemble(ArrayList MIPSprogramsToAssemble, boolean extendedAssemblerEnabled)
-              throws ProcessingException {   
+              throws ProcessingException {
          return assemble(MIPSprogramsToAssemble, extendedAssemblerEnabled, false);
       }
    	  

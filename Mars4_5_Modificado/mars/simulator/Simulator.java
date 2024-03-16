@@ -2,9 +2,12 @@
    import mars.*;
    import mars.venus.*;
    import mars.util.*;
-   import mars.mips.hardware.*;
+import mars.mips.SO.ProcessManager.TabelaDeProcessos;
+import mars.mips.hardware.*;
    import mars.mips.instructions.*;
-   import java.util.*;
+   import mars.tools.ScheduleTimer;
+
+import java.util.*;
    import javax.swing.*;
    import java.awt.event.*;
 	
@@ -70,6 +73,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	// Its constructor looks for the GUI, which at load time is not created yet,
       	// and incorrectly leaves interactiveGUIUpdater null!  This causes runtime
       	// exceptions while running in timed mode.
+    	   
          if (simulator==null) {
             simulator = new Simulator();
          }
@@ -111,8 +115,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     * @throws ProcessingException Throws exception if run-time exception occurs.
     **/
     
-       public boolean simulate(MIPSprogram p, int pc, int maxSteps, int[] breakPoints, AbstractAction actor) throws ProcessingException {
-         simulatorThread = new SimThread(p,pc,maxSteps,breakPoints,actor);
+       public boolean simulate(MIPSprogram p, int pc, int maxSteps, int[] breakPoints, AbstractAction actor) throws ProcessingException {    	   
+    	  simulatorThread = new SimThread(p,pc,maxSteps,breakPoints,actor);
          simulatorThread.start();
       	
       	// Condition should only be true if run from command-line instead of GUI.
@@ -140,7 +144,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	  *  This is used by both STOP and PAUSE features.
    	  */     		
        public void stopExecution(AbstractAction actor) {
-      
+    	   
          if (simulatorThread != null) {
             simulatorThread.setStop(actor);
             for (StopListener l : stopListeners) {
@@ -219,7 +223,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	 *  @param starter the GUI component responsible for this call, usually GO or STEP.  null if none.
       	 */
           SimThread(MIPSprogram p, int pc, int maxSteps, int[] breakPoints, AbstractAction starter) {
-            super(Globals.getGui()!=null);  
+            super(Globals.getGui()!=null);
             this.p = p;
             this.pc = pc;
             this.maxSteps = maxSteps;
@@ -258,7 +262,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          	// are not (because one or the other or both is not yet enabled).
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY-1);
             Thread.yield();  // let the main thread run a bit to finish updating the GUI
-         	
+            
             if (breakPoints == null || breakPoints.length == 0) {
                breakPoints = null;
             } 
@@ -324,7 +328,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          
             while (statement != null) {
                pc = RegisterFile.getProgramCounter(); // added: 7/26/06 (explanation above)
-               RegisterFile.incrementPC();           	
+               if (!ScheduleTimer.isEscalonando() || TabelaDeProcessos.getProcessoEmExecucao() == null) { 
+            	   RegisterFile.incrementPC();
+               }
+               
             	// Perform the MIPS instruction in synchronized block.  If external threads agree
             	// to access MIPS memory and registers only through synchronized blocks on same 
             	// lock variable, then full (albeit heavy-handed) protection of MIPS memory and 
@@ -343,7 +350,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                             Exceptions.RESERVED_INSTRUCTION_EXCEPTION);
                      }
                      // THIS IS WHERE THE INSTRUCTION EXECUTION IS ACTUALLY SIMULATED!
-                     instruction.getSimulationCode().simulate(statement);
+                     if (!ScheduleTimer.isEscalonando() || TabelaDeProcessos.getProcessoEmExecucao() == null) {
+                    	 instruction.getSimulationCode().simulate(statement); 
+                     }
                   	
                   	// IF statement added 7/26/06 (explanation above)
                      if (Globals.getSettings().getBackSteppingEnabled()) {

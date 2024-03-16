@@ -65,7 +65,15 @@ public class TabelaDeProcessos {
         return processosProntos;
     }
     
+    public static Map<Integer, Queue<PCB>> getProcessosPorPrioridade() {
+    	return processosPorPrioridade;
+    }
     
+    public static void reset() {
+    	processosPorPrioridade = new HashMap<>();
+    	processosProntos = new LinkedList<>();
+    	processoEmExecucao = null;
+    }
 }
 
 

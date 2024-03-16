@@ -22,8 +22,11 @@ public class SyscallProcessChange extends AbstractSyscall{
 			processoEmExecucao.setProgramLabel(RegisterFile.getProgramCounter());
 		}
 		
-		Escalonador.escalonarPorFIFO();
-		
-		RegisterFile.setProgramCounter(TabelaDeProcessos.getProcessoEmExecucao().getProgramLabel());
+		if (!TabelaDeProcessos.getProcessosPorPrioridade().isEmpty()) {			
+			Escalonador.escalonarPorPrioridadeFixa();
+		} else {
+			System.out.println(TabelaDeProcessos.getProcessosProntos().toString());
+			Escalonador.escalonarPorFIFO();
+		}
 	}
 }
