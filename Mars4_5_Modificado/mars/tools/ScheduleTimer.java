@@ -28,7 +28,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	
 	private static JTextField insertField;
 	private JTextField counterField;
-	private JComboBox<String> schedulers;
+	private static JComboBox<String> schedulers;
 	private String[] options = {"Line Scheduler", "Priority Scheduler", "Lottery Scheduler"};
 	private static boolean open = false;
 	
@@ -86,7 +86,6 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 		c.gridy++;
 		panel.add(schedulers, c);
 		
-		
 		return panel;
 	}
 	
@@ -132,6 +131,14 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 			return (counter % Integer.valueOf(insertField.getText()) == 0 && (updateCounter % 2 == 0));
 		} else {
 			return false;
+		}
+	}
+	
+	public static String scheduleType() {
+		if (open) {
+			return (String) schedulers.getSelectedItem();
+		} else {
+			return "Line Scheduler";
 		}
 	}
 	

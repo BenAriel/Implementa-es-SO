@@ -23,8 +23,5 @@ public class SyscallCreateSemaphore extends AbstractSyscall{
 		} catch (AddressErrorException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
-
 }

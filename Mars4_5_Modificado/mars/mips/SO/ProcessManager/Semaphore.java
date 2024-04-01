@@ -1,21 +1,75 @@
 package mars.mips.SO.ProcessManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import mars.tools.ScheduleTimer;
 
 public class Semaphore {
 	
 	private int endereco;
 	private int valor;
 	
-	private List<PCB> processosBloqueados = new ArrayList<>();
+	private Queue<PCB> processosBloqueados = new LinkedList<>();
 	
 	Semaphore(int endereco, int valor) {
 		setEndereco(endereco);
 		setValor(valor);
 	}
 	
+	public void SemaphoreDown() {
+		if (this.valor > 0) {
+			valor--;
+		} else if (valor == 0) {
+			PCB processoEmExecucao = TabelaDeProcessos.getProcessoEmExecucao();
+			TabelaDeProcessos.setProcessoEmExecucao(null);
+			processoEmExecucao.blockState();
+			
+			processosBloqueados.add(processoEmExecucao);
+			
+			if (!ScheduleTimer.isEscalonando()) {
+				switch (ScheduleTimer.scheduleType()) {
+				case "Line Scheduler":
+					Escalonador.escalonarPorFIFO();
+					
+					break;
+				case "Priority Scheduler":
+					Escalonador.escalonarPorPrioridadeFixa();
+					
+					break;
+				case "Lottery Scheduler":
+					Escalonador.escalonarPorLoteria();
+					
+					break;
+				default:
+					System.out.println("ERRO: Tipo inválio de escalonador selecionado!");
+				}
+			}
+		}
+	}
 	
+	public void SemaphoreUp() {
+		if (processosBloqueados.isEmpty()) {
+			valor++;
+		} else {
+			switch (ScheduleTimer.scheduleType()) {
+			case "Line Scheduler":
+				TabelaDeProcessos.adicionarProcessoPronto(processosBloqueados.poll());
+				
+				break;
+			case "Priority Scheduler":
+				TabelaDeProcessos.adicionarProcessoProntoPrioridade(processosBloqueados.poll());
+				
+				break;
+			case "Lottery Scheduler":
+				TabelaDeProcessos.adicionarProcessoPronto(processosBloqueados.poll());
+				
+				break;
+			default:
+				System.out.println("ERRO: Tipo inválio de escalonador selecionado!");
+			}
+		}
+	}
 
 	public int getEndereco() {
 		return endereco;
@@ -33,11 +87,11 @@ public class Semaphore {
 		this.valor = valor;
 	}
 
-	public List<PCB> getProcessosBloqueados() {
+	public Queue<PCB> getProcessosBloqueados() {
 		return processosBloqueados;
 	}
 
-	public void setProcessosBloqueados(List<PCB> processosBloqueados) {
+	public void setProcessosBloqueados(Queue<PCB> processosBloqueados) {
 		this.processosBloqueados = processosBloqueados;
 	}
 	

@@ -18,10 +18,11 @@ public class SyscallTerminateSemaphore extends AbstractSyscall{
 		
 		try {
 			Semaphore semaforo = SemaphoreList.getSemaphore(enderecoVariavel);
+			SemaphoreList.semaforos.remove(semaforo);
 			semaforo.getProcessosBloqueados().clear();
+			
 		} catch (Exception e) {
 			System.out.println("ERRO: Nenhum semáforo associado a esse endereço");
 		}
-		
 	}
 }
