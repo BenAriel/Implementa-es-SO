@@ -114,10 +114,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	
 		counterField.setText(String.valueOf(time));
 		
-		if (time == 0 && TabelaDeProcessos.getProcessoEmExecucao() != null && (updateCounter % 2) == 0) {	
-			System.out.println("Time: " + time + "\n" +
-					"counter: " + counter);
-			
+		if (time == 0 && TabelaDeProcessos.getProcessoEmExecucao() != null && (updateCounter % 2) == 0) {				
 			if (schedulers.getSelectedItem() == "Line Scheduler") {
 				Escalonador.escalonarPorFIFO();
 			}
@@ -127,8 +124,6 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 			if (schedulers.getSelectedItem() == "Lottery Scheduler") {
 				Escalonador.escalonarPorLoteria();
 			}
-			
-			System.out.println(TabelaDeProcessos.getProcessosProntos().toString());
 		}
 	}
 	
@@ -144,7 +139,6 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	protected void initializePreGUI() {
 		ScheduleTimer.counter =  0;
 		ScheduleTimer.open = true;
-		System.out.println("Inicializada");
 	}
 	
 	@Override

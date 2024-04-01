@@ -9,6 +9,7 @@ public abstract class Escalonador {
         PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoProntoPorPrioridade();
         
 		if (ultimoProcessoEx != null) {
+			ultimoProcessoEx.readyState();
 			ultimoProcessoEx.copyFromRegisters();
 			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
 		}
@@ -26,6 +27,7 @@ public abstract class Escalonador {
         PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoPorLoteria();
         
 		if (ultimoProcessoEx != null) {
+			ultimoProcessoEx.readyState();
 			ultimoProcessoEx.copyFromRegisters();
 			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
 		}
@@ -42,6 +44,7 @@ public abstract class Escalonador {
         PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoPronto();
         
 		if (ultimoProcessoEx != null) {
+			ultimoProcessoEx.readyState();
 			ultimoProcessoEx.copyFromRegisters();
 			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
 		}
@@ -56,6 +59,7 @@ public abstract class Escalonador {
     private static void executarProximoProcesso(PCB proximoProcessoEx) {
         if (proximoProcessoEx != null) {
             TabelaDeProcessos.setProcessoEmExecucao(proximoProcessoEx);
+            proximoProcessoEx.runningState();
             proximoProcessoEx.copyToRegisters();
             RegisterFile.setProgramCounter(TabelaDeProcessos.getProcessoEmExecucao().getProgramLabel());
         }

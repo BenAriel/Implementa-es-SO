@@ -6,7 +6,7 @@ public class PCB {
     private int[] registers = new int[RegisterFile.NUM_REGISTERS];
     private int programLabel;
     private int pid;
-    private String state;
+    private String state = "pronto";
     private int prioridade;
 
     public PCB(int programLabel, int pid, String state, int prioridade) {
@@ -37,6 +37,28 @@ public class PCB {
         }
     }
     
+    // Funções para manipular o estado atual
+    public void blockState() {
+    	this.state = "bloqueado";
+    }
+    public boolean isBlocked() {
+    	return this.state == "bloqueado";
+    }
+    
+    public void readyState() {
+    	this.state = "pronto";
+    }
+    public boolean isReady() {
+    	return this.state == "pronto";
+    }
+    
+    public void runningState() {
+    	this.state = "executando";
+    }
+    public boolean isRunning() {
+    	return this.state == "executando";
+    }
+    
     // Métodos getters e setters para informações lógicas
     public int getProgramLabel() {
         return programLabel;
@@ -58,14 +80,6 @@ public class PCB {
 
     public void setPid(int pid) {
         this.pid = pid;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public int[] getRegisters() {
