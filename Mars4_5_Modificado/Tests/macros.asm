@@ -14,8 +14,16 @@
 	li $v0, 19
 	syscall
 .end_macro
+.macro SyscallProcessChange2
+	li $v0, 37
+	syscall
+.end_macro
 .macro SyscallProcessTerminate
 	li $v0, 20
+	syscall
+.end_macro
+.macro SyscallProcessTerminate2
+	li $v0, 38
 	syscall
 .end_macro
 .macro SyscallCreateSemaphore(%endereco_var)

@@ -9,22 +9,33 @@ import java.util.Queue;
 import java.util.Random;
 
 public class TabelaDeProcessos {
-    private static Map<Integer, Queue<PCB>> processosPorPrioridade = new HashMap<>();//fila de prioridades
-    private static Queue<PCB> processosProntos = new LinkedList<>();
-    private static PCB processoEmExecucao = null;
+    private static Map<Integer, Queue<PCB>> processosPorPrioridade;
+    private static Queue<PCB> processosProntos;
+    private static PCB processoEmExecucao;
     private static final int MAX_PRIORIDADE = 9;
 
+    // Bloco estático para inicializar as estruturas de dados estáticas
+    static {
+        processosPorPrioridade = new HashMap<>();
+        processosProntos = new LinkedList<>();
+        processoEmExecucao = null;
+        
+        // Inicializa as filas de prioridade
+        for (int prioridade = 0; prioridade <= MAX_PRIORIDADE; prioridade++) {
+            processosPorPrioridade.put(prioridade, new LinkedList<>());
+        }
+    }
+
     public static void adicionarProcessoProntoPrioridade(PCB processo) {
-        int prioridade = processo.getPrioridade(); //pega a prioridade do processo
-        Queue<PCB> fila = processosPorPrioridade.getOrDefault(prioridade, new LinkedList<>());
-        fila.add(processo);//se uma fila com aquela fila não existir, cria uma nova fila. Se existir, recupera a fila adiciona o processo na fila
-        processosPorPrioridade.put(prioridade, fila); //adiciona a fila na tabela de processos por prioridade
+        int prioridade = processo.getPrioridade();
+        Queue<PCB> fila = processosPorPrioridade.get(prioridade);
+        fila.add(processo);
     }
 
     public static PCB obterProximoProcessoProntoPorPrioridade() {
-        for (int prioridade = MAX_PRIORIDADE; prioridade >= 0; prioridade--) {//loop da maior prioridade para a menor
-            Queue<PCB> fila = processosPorPrioridade.getOrDefault(prioridade, new LinkedList<>());// Se a fila daquela prioridade não existir, cria uma nova fila. Se existir, recupera a fila.
-            if (!fila.isEmpty()) { //verifica se a fila não está vazia(Se tiver sido acabada de ser criada, estará vazia)
+        for (int prioridade = MAX_PRIORIDADE; prioridade >= 0; prioridade--) {
+            Queue<PCB> fila = processosPorPrioridade.get(prioridade);
+            if (!fila.isEmpty()) {
                 return fila.poll();
             }
         }

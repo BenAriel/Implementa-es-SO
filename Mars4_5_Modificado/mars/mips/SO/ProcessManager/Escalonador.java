@@ -15,10 +15,9 @@ public abstract class Escalonador {
 		}
         
         executarProximoProcesso(proximoProcessoEx);
-
-        if (ultimoProcessoEx != null)
-        {
-            TabelaDeProcessos.adicionarProcessoProntoPrioridade(proximoProcessoEx);
+        
+        if (ultimoProcessoEx != null) {
+        	TabelaDeProcessos.adicionarProcessoProntoPrioridade(proximoProcessoEx);
         }
     }
 
