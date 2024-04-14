@@ -3,11 +3,11 @@
 .data
 .text             
       #criação dos processos com prioridade
-SyscallFork2(Programa1,1)
+	SyscallFork2(Programa1,1)
 	SyscallFork2(Programa2,2)
 	
 	#escalonando o primeiro processo
-SyscallProcessChange2
+	SyscallProcessChange
 	
 Programa1:					
 		addi $s1, $zero, 1 # valor inicial do contador
@@ -15,7 +15,7 @@ Programa1:
 	loop1: 	addi $s1, $s1, 1
 		beq $s1, $s2, fim1
 j loop1
-	fim1:	SyscallProcessTerminate2
+	fim1:	SyscallProcessTerminate
 
 Programa2: 
 		addi $s3, $zero, -1 # valor inicial do contador
@@ -23,4 +23,4 @@ Programa2:
 	loop2: 	addi $s3, $s3, -1
 		beq $s3, $s4, fim2
 		j loop2
-	fim2:	SyscallProcessTerminate2
+	fim2:	SyscallProcessTerminate
