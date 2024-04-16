@@ -12,11 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import mars.mips.SO.ProcessManager.Escalonador;
+import mars.mips.SO.ProcessManager.GerenciadorDeMemoria;
 import mars.mips.SO.ProcessManager.TabelaDeProcessos;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.RegisterFile;
 
 @SuppressWarnings("deprecation")
 public class ScheduleTimer extends AbstractMarsToolAndApplication{
@@ -89,7 +88,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 		return panel;
 	}
 	
-//	@Override
+	@Override
 	protected void addAsObserver() {
 		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
 	}
@@ -100,6 +99,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		if (TabelaDeProcessos.getProcessoEmExecucao() != null) {
 			ScheduleTimer.counter++;
+			GerenciadorDeMemoria.ensurePage();
 		}
 		updateDisplay();
 	}

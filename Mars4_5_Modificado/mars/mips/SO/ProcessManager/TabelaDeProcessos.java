@@ -43,6 +43,7 @@ public class TabelaDeProcessos {
     }
 
     public static PCB obterProximoProcessoPronto() { // utilizar para escalonamento FIFO
+        System.out.println(processosProntos.isEmpty());
         if (!processosProntos.isEmpty()) {
             return processosProntos.poll();
         } else {

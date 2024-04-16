@@ -6,16 +6,27 @@ public class PCB {
     private int[] registers = new int[RegisterFile.NUM_REGISTERS];
     private int programLabel;
     private int pid;
+    private int upperLim;
+    private int lowerLim;
     private String state = "pronto";
     private int prioridade;
 
     public PCB(int programLabel, int pid, String state, int prioridade) {
         // inicialize outras propriedades
         this.programLabel = programLabel;
+        this.upperLim = programLabel;
         this.pid = pid;
         this.state = state;
         this.prioridade = prioridade;
     }
+
+    public PCB(int programLabel, int pid) {
+        // inicialize outras propriedades
+        this.programLabel = programLabel;
+        this.upperLim = programLabel;
+        this.pid = pid;
+    }
+
     public PCB(){};
 
     // Métodos para copiar o conteúdo dos registradores físicos do hardware para a PCB
@@ -35,6 +46,10 @@ public class PCB {
         for (int i = 0; i < RegisterFile.NUM_REGISTERS; i++) {
             RegisterFile.updateRegister(i, this.registers[i]);
         }
+    }
+
+    public boolean adressinRange(int adress) {
+        return (!(adress > this.getLowerLim()) || !(adress < this.getUpperLim()));
     }
     
     // Funções para manipular o estado atual
@@ -89,4 +104,22 @@ public class PCB {
     public void setRegisters(int[] registers) {
         this.registers = registers;
     }
+
+    public int getUpperLim() {
+        return upperLim;
+    }
+
+    public void setUpperLim(int upperLim) {
+        this.upperLim = upperLim;
+    }
+
+    public int getLowerLim() {
+        return lowerLim;
+    }
+
+    public void setLowerLim(int lowerLim) {
+        this.lowerLim = lowerLim;
+    }
+
+    
 }

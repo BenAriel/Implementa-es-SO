@@ -8,6 +8,9 @@ import mars.mips.hardware.RegisterFile;
 
 public class SyscallFork2 extends AbstractSyscall{
 
+	private static int id = 0;
+	private static PCB lastPcb;
+
 	public SyscallFork2() {
 		super(21, "Fork2");
 	}
@@ -16,12 +19,17 @@ public class SyscallFork2 extends AbstractSyscall{
 	public void simulate(ProgramStatement statement) throws ProcessingException {
 		int programLabel = RegisterFile.getValue(4);
 		int prioridade = RegisterFile.getValue(5);
-		
-		PCB processoAtual = new PCB();
-		processoAtual.setProgramLabel(programLabel);
+		id++;
+
+		PCB processoAtual = new PCB(programLabel, id);
 		processoAtual.setPrioridade(prioridade);
+
+		if(id != 1) {
+			lastPcb.setLowerLim(programLabel - 4);
+		}
+
+		lastPcb = processoAtual;
 		
 		TabelaDeProcessos.adicionarProcessoProntoPrioridade(processoAtual);
 	}
-
 }

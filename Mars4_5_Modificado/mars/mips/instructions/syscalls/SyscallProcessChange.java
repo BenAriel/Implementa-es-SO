@@ -18,8 +18,6 @@ public class SyscallProcessChange extends AbstractSyscall{
 		try {
 			String tipo = ScheduleTimer.scheduleType();
 
-			System.out.println(tipo);
-
 			switch (tipo) {
 				case "Line Scheduler":
 					Escalonador.escalonarPorFIFO();

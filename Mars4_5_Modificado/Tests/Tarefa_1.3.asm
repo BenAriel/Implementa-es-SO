@@ -2,9 +2,9 @@
 
 .data
 .text             
-      #criação dos processos com prioridade
-	SyscallFork2(Programa1,1)
-	SyscallFork2(Programa2,2)
+      	#criação dos processos com prioridade
+	SyscallFork(Programa1)
+	SyscallFork(Programa2)
 	
 	#escalonando o primeiro processo
 	SyscallProcessChange
