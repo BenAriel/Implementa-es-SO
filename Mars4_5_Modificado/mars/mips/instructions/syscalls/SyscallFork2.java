@@ -4,6 +4,7 @@ import mars.ProcessingException;
 import mars.ProgramStatement;
 import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.TabelaDeProcessos;
+import mars.mips.hardware.Memory;
 import mars.mips.hardware.RegisterFile;
 
 public class SyscallFork2 extends AbstractSyscall{
@@ -25,11 +26,27 @@ public class SyscallFork2 extends AbstractSyscall{
 		processoAtual.setPrioridade(prioridade);
 
 		if(id != 1) {
-			lastPcb.setLowerLim(programLabel - 4);
+			ensureLimit(processoAtual);
+		} else {
+			processoAtual.setLowerLim(Memory.textLimitAddress);
 		}
 
 		lastPcb = processoAtual;
 		
 		TabelaDeProcessos.adicionarProcessoProntoPrioridade(processoAtual);
+	}
+
+	public void ensureLimit(PCB processoAtual) {
+		if (processoAtual.getUpperLim() > lastPcb.getLowerLim()) {
+			lastPcb.setLowerLim(processoAtual.getUpperLim() - 4);
+			processoAtual.setLowerLim(Memory.textLimitAddress);
+
+		} else if (processoAtual.getUpperLim() < lastPcb.getUpperLim()) {
+			processoAtual.setLowerLim(lastPcb.getUpperLim() - 4);
+			lastPcb.setLowerLim(Memory.textLimitAddress);
+
+		} else {
+			processoAtual.setLowerLim(Memory.textLimitAddress);
+		}
 	}
 }

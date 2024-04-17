@@ -4,6 +4,7 @@ public class Pagina {
     private int tamanhoPg;
     private int[] enderecos;
     private int i = 0;
+    private boolean read = false;
 
     public Pagina(int tamanhoPg, int[] enderecos) {
         this.tamanhoPg = tamanhoPg;
@@ -28,5 +29,13 @@ public class Pagina {
         }
 
         return true;
+    }
+
+    public boolean getRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }
