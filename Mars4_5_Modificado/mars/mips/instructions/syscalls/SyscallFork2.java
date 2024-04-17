@@ -37,7 +37,7 @@ public class SyscallFork2 extends AbstractSyscall{
 	}
 
 	public void ensureLimit(PCB processoAtual) {
-		if (processoAtual.getUpperLim() > lastPcb.getLowerLim()) {
+		if (processoAtual.getUpperLim() > lastPcb.getUpperLim()) {
 			lastPcb.setLowerLim(processoAtual.getUpperLim() - 4);
 			processoAtual.setLowerLim(Memory.textLimitAddress);
 
@@ -45,8 +45,6 @@ public class SyscallFork2 extends AbstractSyscall{
 			processoAtual.setLowerLim(lastPcb.getUpperLim() - 4);
 			lastPcb.setLowerLim(Memory.textLimitAddress);
 
-		} else {
-			processoAtual.setLowerLim(Memory.textLimitAddress);
 		}
 	}
 }
