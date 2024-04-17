@@ -128,6 +128,10 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	
 	public static boolean isEscalonando() {
 		if (open) {
+			int pseudocounter = counter;
+			if (pseudocounter == 0) {
+				pseudocounter = 1;
+			}
 			return (counter % Integer.valueOf(insertField.getText()) == 0 && (updateCounter % 2 == 0));
 		} else {
 			return false;

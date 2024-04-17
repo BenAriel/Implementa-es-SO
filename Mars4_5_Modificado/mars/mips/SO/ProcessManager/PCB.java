@@ -48,8 +48,8 @@ public class PCB {
         }
     }
 
-    public boolean adressinRange(int adress) {
-        return (!(adress > this.getLowerLim()) || !(adress < this.getUpperLim()));
+    public boolean adressinRange(int address) {
+        return (lowerLim >= address && address >= upperLim);
     }
     
     // Funções para manipular o estado atual

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import mars.mips.hardware.RegisterFile;
-import mars.simulator.Simulator;
 import mars.util.SystemIO;
 
 public abstract class GerenciadorDeMemoria {
@@ -16,6 +15,9 @@ public abstract class GerenciadorDeMemoria {
     private static Map<Integer, List<Pagina>> mapa = new HashMap<>();
     private static String algoritmo = "Fifo";
 
+    // Todo system.out que está aqui tem o propósito de debuggar o código, 
+    // habilite-os para ver o que o programa está analisando naquele momento.
+
     public static void ensurePage() {
         PCB processoAtual = TabelaDeProcessos.getProcessoEmExecucao();
         int pc = RegisterFile.getProgramCounter();
@@ -24,31 +26,30 @@ public abstract class GerenciadorDeMemoria {
         Pagina e;
         try {
             if(processoAtual.adressinRange(pc)) {
-                for (int j = 0; j < mapa.get(processoAtual.getPid()).size(); j++) {
+                for (int j = 0; j < mapa.get(processoAtual.getPid()).size() && !loaded; j++) {
                     e = mapa.get(processoAtual.getPid()).get(j);
                     for (int i = 0; (i < tamanhoPg) && !loaded; i++) {
                         if (e.getAdress()[i] == pc) {
                             loaded = true;
                         }
-                        System.out.println("comparacao: " + e.getAdress()[i] + " == " + pc);
+                        // System.out.println("comparacao: " + e.getAdress()[i] + " == " + pc + "?");
                     }
                 }
 
                 if (!loaded) {
-                    System.out.println("Page Fault loaded = false");
+                    // System.out.println("Page Fault, reason: loaded = false");
                     pageFault();
                 }
             } else {
                 SystemIO.printString("Erro encontrado, acesso de página fora dos limites do processo" +
                                     "\nLimites de endereço do processo: [" + processoAtual.getUpperLim() + ", " + processoAtual.getLowerLim() + "]" +
                                     "\nEndereço acessado: " + pc);
-                                    
-                Simulator.getInstance().stopExecution(null);
             }
         } catch (NullPointerException npe) {
+            // System.out.println("Page Fault, reason: First page");
             pageFault();
         }
-        System.out.println("___________Fim ensurePage___________");
+        // System.out.println("___________Fim ensurePage___________");
     }
 
     public static Pagina pageFault() {
@@ -58,8 +59,8 @@ public abstract class GerenciadorDeMemoria {
 
         for (int i = 0; i < tamanhoPg; i++) {
             if (processoAtual.adressinRange(pc + (i * 4))) {
-                System.out.println(pc + (i * 4));
                 pg.add(pc + (i * 4));
+                // System.out.println(pc + (i * 4) + ": " + pg.getAdress()[i]);
             } else {
                 pg.add(-1);
             }
@@ -68,14 +69,14 @@ public abstract class GerenciadorDeMemoria {
         int id = processoAtual.getPid();
 
         if (!mapa.containsKey(id)) {
-            System.out.println("inserido");
+            // System.out.println("Primeira página inserida");
             mapa.put(id, new ArrayList<>());
             quantMap.put(id, 1);
             mapa.get(id).add(pg);
 
         } else {
-            System.out.println("segunda pg");
             paginacao(pg, processoAtual);
+            // System.out.println("Próxima página inserida");
         }
 
         quantMap.replace(id, quantMap.get(id) % quantMax);
