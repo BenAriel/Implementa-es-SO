@@ -99,7 +99,6 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		if (TabelaDeProcessos.getProcessoEmExecucao() != null) {
 			ScheduleTimer.counter++;
-			GerenciadorDeMemoria.ensurePage();
 		}
 		updateDisplay();
 	}
