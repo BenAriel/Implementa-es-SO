@@ -6,6 +6,7 @@
 	SyscallFork(Programa1)
 	SyscallFork(Programa2)
 	SyscallFork(Idle)
+	
 	#escalonando o primeiro processo
 	SyscallProcessChange
 	
@@ -19,7 +20,7 @@ Programa1:
 		addi $s2, $zero, 10 # valor limite do contador
 	loop1: 	addi $s1, $s1, 1
 		beq $s1, $s2, fim1
-		j loop1
+		j loop2
 	fim1:	SyscallProcessTerminate
 
 Programa2: 

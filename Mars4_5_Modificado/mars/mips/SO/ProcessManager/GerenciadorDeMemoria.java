@@ -32,12 +32,12 @@ public abstract class GerenciadorDeMemoria {
                         if (e.getAdress()[i] == pc) {
                             loaded = true;
                         }
-                        // System.out.println("comparacao: " + e.getAdress()[i] + " == " + pc + "?");
+                        System.out.println("comparacao: " + e.getAdress()[i] + " == " + pc + "?");
                     }
                 }
 
                 if (!loaded) {
-                    // System.out.println("Page Fault, reason: loaded = false");
+                    System.out.println("Page Fault, reason: loaded = false");
                     pageFault();
                 }
             } else {
@@ -46,10 +46,10 @@ public abstract class GerenciadorDeMemoria {
                                     "\nEndereço acessado: " + pc);
             }
         } catch (NullPointerException npe) {
-            // System.out.println("Page Fault, reason: First page");
+            System.out.println("Page Fault, reason: First page");
             pageFault();
         }
-        // System.out.println("___________Fim ensurePage___________");
+        System.out.println("___________Fim ensurePage___________");
     }
 
     public static Pagina pageFault() {
@@ -60,7 +60,7 @@ public abstract class GerenciadorDeMemoria {
         for (int i = 0; i < tamanhoPg; i++) {
             if (processoAtual.adressinRange(pc + (i * 4))) {
                 pg.add(pc + (i * 4));
-                // System.out.println(pc + (i * 4) + ": " + pg.getAdress()[i]);
+                System.out.println(pc + (i * 4) + ": " + pg.getAdress()[i]);
             } else {
                 pg.add(-1);
             }
@@ -69,14 +69,14 @@ public abstract class GerenciadorDeMemoria {
         int id = processoAtual.getPid();
 
         if (!mapa.containsKey(id)) {
-            // System.out.println("Primeira página inserida");
+            System.out.println("Primeira página inserida");
             mapa.put(id, new ArrayList<>());
             quantMap.put(id, 1);
             mapa.get(id).add(pg);
 
         } else {
             paginacao(pg, processoAtual);
-            // System.out.println("Próxima página inserida");
+            System.out.println("Próxima página inserida");
         }
 
         quantMap.replace(id, quantMap.get(id) % quantMax);

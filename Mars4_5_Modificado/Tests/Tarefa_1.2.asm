@@ -11,7 +11,7 @@
 	
 Idle:					
 	loop:
-		SyscallProcessChange
+		NOP
 		j loop
 
 Programa1:					

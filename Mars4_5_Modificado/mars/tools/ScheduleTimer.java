@@ -12,13 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import mars.mips.SO.ProcessManager.Escalonador;
-import mars.mips.SO.ProcessManager.GerenciadorDeMemoria;
 import mars.mips.SO.ProcessManager.TabelaDeProcessos;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 
 @SuppressWarnings("deprecation")
-public class ScheduleTimer extends AbstractMarsToolAndApplication{
+public class ScheduleTimer extends AbstractMarsToolAndApplication {
 	
 	private static final long serialVersionUID = 7693825262258672056L;
 	private static String name   = "Schedule Timer";

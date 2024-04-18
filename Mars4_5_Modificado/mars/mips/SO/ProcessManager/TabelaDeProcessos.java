@@ -32,6 +32,16 @@ public class TabelaDeProcessos {
         fila.add(processo);
     }
 
+    public static PCB observarProximoProcessoProntoPorPrioridade() {
+        for (int prioridade = MAX_PRIORIDADE; prioridade >= 0; prioridade--) {
+            Queue<PCB> fila = processosPorPrioridade.get(prioridade);
+            if (!fila.isEmpty()) {
+                return fila.peek();
+            }
+        }
+        return null;
+    }
+
     public static PCB obterProximoProcessoProntoPorPrioridade() {
         for (int prioridade = MAX_PRIORIDADE; prioridade >= 0; prioridade--) {
             Queue<PCB> fila = processosPorPrioridade.get(prioridade);
