@@ -20,7 +20,9 @@ public class Semaphore {
 	public void SemaphoreDown() {
 		if (this.valor > 0) {
 			valor--;
+			System.out.println(valor);
 		} else if (valor == 0) {
+			System.out.println(valor);
 			PCB processoEmExecucao = TabelaDeProcessos.getProcessoEmExecucao();
 			TabelaDeProcessos.setProcessoEmExecucao(null);
 			processoEmExecucao.blockState();
@@ -51,7 +53,9 @@ public class Semaphore {
 	public void SemaphoreUp() {
 		if (processosBloqueados.isEmpty()) {
 			valor++;
+			System.out.println(valor);
 		} else {
+			System.out.println(valor);
 			switch (ScheduleTimer.scheduleType()) {
 			case "Line Scheduler":
 				TabelaDeProcessos.adicionarProcessoPronto(processosBloqueados.poll());

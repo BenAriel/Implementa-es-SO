@@ -13,7 +13,7 @@ import java.awt.GridBagLayout;
 import java.util.Observable;
 
 @SuppressWarnings("deprecation")
-public class MemoryManager extends AbstractMarsToolAndApplication{
+public class MemoryManager extends AbstractMarsToolAndApplication {
 	private static String name   = "Memory Manager";
 	private static String version = "Version 1.0 (Artur S. Guedes, Ben Ariel França Martins, Caio Anderson Martins Moura, João Pedro Pereira Frutoso, Lucas Gabriel Oliveira da Silva, Ricardo Viana Marinho)";
 	private static String heading = "Makes the Memory Manager class work";
@@ -63,4 +63,10 @@ public class MemoryManager extends AbstractMarsToolAndApplication{
     public void updateDisplay() {
         counterField.setText(String.valueOf(GerenciadorDeMemoria.getMapa().size()));
     }
+
+    @Override
+	protected void reset() {
+        counterField.setText("0");
+        GerenciadorDeMemoria.clear();
+	}
 }

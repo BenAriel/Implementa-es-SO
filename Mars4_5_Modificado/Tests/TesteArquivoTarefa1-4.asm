@@ -7,13 +7,13 @@
 # buffer de dados compartilhado deve ser uma pilha 
 # lw e sw para inserir e remover do buffer (observar estado da pilha durante a execucao)
 
-	empty: .word 100
+	empty: .word 16
     full: .word 0
     mutex: .word 1
 
 	buffer:
 		.align 2
-		.space 128
+		.space 64
 
 .text
 	SyscallCreateSemaphore(empty)#empty	
@@ -23,8 +23,10 @@
 	SyscallCreateSemaphore(mutex)#mutex
 	
 	#criação dos processos com prioridade
-	SyscallFork2(Producer, 2)
-	SyscallFork2(Consumer, 1)
+	SyscallFork2(Producer,2)
+	SyscallFork2(Consumer,1)
+	
+	
 	#escalonando o primeiro processo
 	SyscallProcessChange
 	 

@@ -105,6 +105,11 @@ public abstract class GerenciadorDeMemoria {
         }
     }
 
+    public static void clear() {
+        quantMap.clear();
+        mapa.clear();
+    }
+
     // Getters e Setters
     public static int getTamanhoPg() {
         return tamanhoPg;
