@@ -351,7 +351,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      }
                      // THIS IS WHERE THE INSTRUCTION EXECUTION IS ACTUALLY SIMULATED!
                      if (!ScheduleTimer.isEscalonando() || TabelaDeProcessos.getProcessoEmExecucao() == null) {
-                    	 instruction.getSimulationCode().simulate(statement); 
+                    	   instruction.getSimulationCode().simulate(statement);
                      }
                   	
                   	// IF statement added 7/26/06 (explanation above)

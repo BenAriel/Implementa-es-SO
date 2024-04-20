@@ -6,16 +6,27 @@ public class PCB {
     private int[] registers = new int[RegisterFile.NUM_REGISTERS];
     private int programLabel;
     private int pid;
-    private String state;
+    private int upperLim;
+    private int lowerLim;
+    private String state = "pronto";
     private int prioridade;
 
     public PCB(int programLabel, int pid, String state, int prioridade) {
         // inicialize outras propriedades
         this.programLabel = programLabel;
+        this.upperLim = programLabel;
         this.pid = pid;
         this.state = state;
         this.prioridade = prioridade;
     }
+
+    public PCB(int programLabel, int pid) {
+        // inicialize outras propriedades
+        this.programLabel = programLabel;
+        this.upperLim = programLabel;
+        this.pid = pid;
+    }
+
     public PCB(){};
 
     // Métodos para copiar o conteúdo dos registradores físicos do hardware para a PCB
@@ -35,6 +46,32 @@ public class PCB {
         for (int i = 0; i < RegisterFile.NUM_REGISTERS; i++) {
             RegisterFile.updateRegister(i, this.registers[i]);
         }
+    }
+
+    public boolean adressinRange(int address) {
+        return (lowerLim >= address && address >= upperLim);
+    }
+    
+    // Funções para manipular o estado atual
+    public void blockState() {
+    	this.state = "bloqueado";
+    }
+    public boolean isBlocked() {
+    	return this.state == "bloqueado";
+    }
+    
+    public void readyState() {
+    	this.state = "pronto";
+    }
+    public boolean isReady() {
+    	return this.state == "pronto";
+    }
+    
+    public void runningState() {
+    	this.state = "executando";
+    }
+    public boolean isRunning() {
+    	return this.state == "executando";
     }
     
     // Métodos getters e setters para informações lógicas
@@ -60,14 +97,6 @@ public class PCB {
         this.pid = pid;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public int[] getRegisters() {
         return registers;
     }
@@ -75,4 +104,22 @@ public class PCB {
     public void setRegisters(int[] registers) {
         this.registers = registers;
     }
+
+    public int getUpperLim() {
+        return upperLim;
+    }
+
+    public void setUpperLim(int upperLim) {
+        this.upperLim = upperLim;
+    }
+
+    public int getLowerLim() {
+        return lowerLim;
+    }
+
+    public void setLowerLim(int lowerLim) {
+        this.lowerLim = lowerLim;
+    }
+
+    
 }

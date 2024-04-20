@@ -15,11 +15,9 @@ import mars.mips.SO.ProcessManager.Escalonador;
 import mars.mips.SO.ProcessManager.TabelaDeProcessos;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.RegisterFile;
 
 @SuppressWarnings("deprecation")
-public class ScheduleTimer extends AbstractMarsToolAndApplication{
+public class ScheduleTimer extends AbstractMarsToolAndApplication {
 	
 	private static final long serialVersionUID = 7693825262258672056L;
 	private static String name   = "Schedule Timer";
@@ -28,7 +26,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	
 	private static JTextField insertField;
 	private JTextField counterField;
-	private JComboBox<String> schedulers;
+	private static JComboBox<String> schedulers;
 	private String[] options = {"Line Scheduler", "Priority Scheduler", "Lottery Scheduler"};
 	private static boolean open = false;
 	
@@ -86,11 +84,10 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 		c.gridy++;
 		panel.add(schedulers, c);
 		
-		
 		return panel;
 	}
 	
-//	@Override
+	@Override
 	protected void addAsObserver() {
 		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
 	}
@@ -114,10 +111,7 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	
 		counterField.setText(String.valueOf(time));
 		
-		if (time == 0 && TabelaDeProcessos.getProcessoEmExecucao() != null && (updateCounter % 2) == 0) {	
-			System.out.println("Time: " + time + "\n" +
-					"counter: " + counter);
-			
+		if (time == 0 && TabelaDeProcessos.getProcessoEmExecucao() != null && (updateCounter % 2) == 0) {				
 			if (schedulers.getSelectedItem() == "Line Scheduler") {
 				Escalonador.escalonarPorFIFO();
 			}
@@ -127,16 +121,26 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 			if (schedulers.getSelectedItem() == "Lottery Scheduler") {
 				Escalonador.escalonarPorLoteria();
 			}
-			
-			System.out.println(TabelaDeProcessos.getProcessosProntos().toString());
 		}
 	}
 	
 	public static boolean isEscalonando() {
 		if (open) {
+			int pseudocounter = counter;
+			if (pseudocounter == 0) {
+				pseudocounter = 1;
+			}
 			return (counter % Integer.valueOf(insertField.getText()) == 0 && (updateCounter % 2 == 0));
 		} else {
 			return false;
+		}
+	}
+	
+	public static String scheduleType() {
+		if (open) {
+			return (String) schedulers.getSelectedItem();
+		} else {
+			return "Line Scheduler";
 		}
 	}
 	
@@ -144,7 +148,6 @@ public class ScheduleTimer extends AbstractMarsToolAndApplication{
 	protected void initializePreGUI() {
 		ScheduleTimer.counter =  0;
 		ScheduleTimer.open = true;
-		System.out.println("Inicializada");
 	}
 	
 	@Override

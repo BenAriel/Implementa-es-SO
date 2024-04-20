@@ -6,18 +6,26 @@ public abstract class Escalonador {
 	
     public static void escalonarPorPrioridadeFixa() {
         PCB ultimoProcessoEx = TabelaDeProcessos.getProcessoEmExecucao();
-        PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoProntoPorPrioridade();
-        
-		if (ultimoProcessoEx != null) {
-			ultimoProcessoEx.copyFromRegisters();
-			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
-		}
-        
-        executarProximoProcesso(proximoProcessoEx);
 
-        if (ultimoProcessoEx != null)
-        {
-            TabelaDeProcessos.adicionarProcessoProntoPrioridade(proximoProcessoEx);
+        if (ultimoProcessoEx != null) {
+            if (ultimoProcessoEx.getPrioridade() <= TabelaDeProcessos.observarProximoProcessoProntoPorPrioridade().getPrioridade()) {
+                PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoProntoPorPrioridade();
+
+                if (ultimoProcessoEx != null) {
+                    ultimoProcessoEx.readyState();
+                    ultimoProcessoEx.copyFromRegisters();
+                    ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
+                }
+                
+                executarProximoProcesso(proximoProcessoEx);
+                
+                if (ultimoProcessoEx != null) {
+                    TabelaDeProcessos.adicionarProcessoProntoPrioridade(ultimoProcessoEx);
+                }
+            }
+        } else {
+            PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoProntoPorPrioridade();
+            executarProximoProcesso(proximoProcessoEx);
         }
     }
 
@@ -26,6 +34,7 @@ public abstract class Escalonador {
         PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoPorLoteria();
         
 		if (ultimoProcessoEx != null) {
+			ultimoProcessoEx.readyState();
 			ultimoProcessoEx.copyFromRegisters();
 			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
 		}
@@ -35,13 +44,14 @@ public abstract class Escalonador {
             if (ultimoProcessoEx != null) {
             	TabelaDeProcessos.adicionarProcessoPronto(ultimoProcessoEx);
             }
-        }
+    }
     
     public static void escalonarPorFIFO() {
         PCB ultimoProcessoEx = TabelaDeProcessos.getProcessoEmExecucao();
         PCB proximoProcessoEx = TabelaDeProcessos.obterProximoProcessoPronto();
         
 		if (ultimoProcessoEx != null) {
+			ultimoProcessoEx.readyState();
 			ultimoProcessoEx.copyFromRegisters();
 			ultimoProcessoEx.setProgramLabel(RegisterFile.getProgramCounter());
 		}
@@ -56,6 +66,7 @@ public abstract class Escalonador {
     private static void executarProximoProcesso(PCB proximoProcessoEx) {
         if (proximoProcessoEx != null) {
             TabelaDeProcessos.setProcessoEmExecucao(proximoProcessoEx);
+            proximoProcessoEx.runningState();
             proximoProcessoEx.copyToRegisters();
             RegisterFile.setProgramCounter(TabelaDeProcessos.getProcessoEmExecucao().getProgramLabel());
         }
